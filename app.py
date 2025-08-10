@@ -132,7 +132,7 @@ def store_login():
             return redirect(url_for('store_dashboard'))
         else:
             flash('账号或密码错误，请重试')
-    return render_template('store_login.html')
+    return render_template('store/store_login.html')
 
 @app.route('/store_dashboard')
 def store_dashboard():
@@ -140,7 +140,7 @@ def store_dashboard():
         flash('请先登录')
         return redirect(url_for('store_login'))
 
-    return render_template('store_dashboard.html')
+    return render_template('store/store_dashboard.html')
 
 @app.route('/product',methods = ['GET','POST'])
 def product():
