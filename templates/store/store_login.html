@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>店家登录页面</title>
+    <style>
+        body{
+            background-image: url("{{url_for('static',filename='background.jpg')}}");
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            max-width: 600px;
+            margin: auto;
+            padding: 40px 20px;
+            color: #333;
+        }
+        header{
+            text-align: center;
+            text-decoration: none;
+            margin-top: 30px;
+        }
+        header h1{
+            margin-bottom: 10px ;
+        }
+        main{
+            text-align: center;
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 10px rgba(0, 0, 0, 0.05);
+        }
+        form{
+            text-align: left;
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        form label{
+            font-weight: bold;
+        }
+        form input{
+            width: 97%;
+            padding: 8px;
+            border-radius: 15px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+        form button{
+            padding: 10px 20px;
+            border: none;
+            background-color: rgb(32, 173, 34);
+            color:white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 120px;
+            font-size: 1em;
+            transition: background-color 0.2s ease;
+        }
+        form button:hover{
+            background-color: green;
+        }
+        form a{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 10px;
+            color: white;
+            background-color: rgb(255, 70, 70);
+            border-radius: 20px;
+            padding: 10px 20px 10px 20px ;
+            width: 80px;
+        }
+        form a:hover{
+            background-color: red;
+        }
+        .falsh-error{
+            color: red;
+            border-radius: 15px;
+            padding: 10px;
+            background-color: white;
+            margin-top: 10px;
+            border: 1px solid #f5c6cb;
+        }
+        footer{
+            margin-top: 40px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>店家您好！欢迎进入怡人便利店管理系统，请输入您的账号和密码进行登录</h1>
+    </header>
+    <main>
+        <form method="post">
+            <label for="store_username">账号：</label>
+            <input id="store_username" name="username" type="text" placeholder="请输入您的账号" required>
+
+            <label for="store_password">密码：</label>
+            <input id="store_password" name="password" type="text" placeholder="请输入您的密码" required>
+
+            <button type="submit">点击登录</button>
+            <a href="{{url_for('store_logout')}}">退出登录</a>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for msg in messages%}
+                        {% if '密码' in msg or '账号' in msg %}
+                            <div class="flash-error">{{msg}}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </form>
+    </main>
+    <footer>
+        <p>怡人便利店管理系统 | 技术支持邮箱：zhou39506@gmail.com</p>
+    </footer>
+</body>
+</html>

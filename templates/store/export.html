@@ -1,0 +1,58 @@
+<div class="card">
+    <h2>数据导出</h2>
+    <form action="{{url_for('export_data')}}" method="get">
+        <label for="data_type">选择导出内容：</label>
+        <select id="data_type" name="data_type" required>
+            <option value="product">商品列表</option>
+            <option value="order">订单记录</option>
+            <option value="purchase">进货记录</option>
+        </select>
+
+        <label for="start_date">起始时间：</label>
+        <input type="date" id="start_date" name="start_date" required>
+
+        <button type="submit">点击导出</button>
+    </form>
+</div>
+<style>
+  .card {
+    background-color: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    max-width: 600px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 1em;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  select, input[type="date"] {
+    padding: 8px;
+    border-radius: 0px;
+    border: 1px solid #ccc;
+  }
+
+  button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100px;
+  }
+
+  button:hover {
+    background-color: #218838;
+  }
+</style>

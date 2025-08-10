@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" /> <!--设置编码方式，确保输入的字符能够正常显示-->
+  <meta name="viewport" content="width=device-width,initial-scale=1" /> <!--content设置宽度等于屏幕宽度，初始不缩放，设置name为视图-->
+  <title>便利店主页</title>
+  <style>
+      body{
+          background-image: url("{{url_for('static',filename='background.jpg')}}");
+          background-attachment: fixed;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size:cover;
+          max-width: 600px;
+          margin: auto;
+          padding: 40px 20px;
+          color: #333;
+      }
+      header{
+          text-align: center;
+          text-decoration: none;
+          margin-top: 30px;
+      }
+      header h1{
+          margin-bottom: 10px ;
+      }
+      main{
+          text-align: center;
+          text-decoration: none;
+          background-color: rgba(255, 255, 255, 0);
+          padding: 20px;
+          border-radius: 25px;
+          box-shadow: 10px rgba(0, 0, 0, 0.05);
+          width: 300px;
+          margin: auto;
+      }
+      .btn-group{
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          gap: 25px;
+          margin: auto;
+          background-color: rgba(255, 255, 255, 0);
+          border-radius: 25px;
+          width: 300px;
+      }
+      .btn-group a{
+          display: block;
+          padding: 12px;
+          background-color:  rgb(0, 183, 255);
+          text-align: center;
+          text-decoration: none;
+          color: white;
+          font-weight: bold;
+          border-radius: 25px;
+          transition: background-color 0.3s ease;
+          margin: auto;
+      }
+      .btn-group a:hover{
+          background-color: rgb(6, 101, 253);
+      }
+      footer{
+          margin-top: 40px;
+          text-align: center;
+          text-decoration: none;
+          font-size: 1em;
+      }
+  </style>
+</head>
+<body>
+
+
+  <header>
+      <h1>您好！欢迎进入怡人便利店，请选择您的身份进行登录</h1>
+      <p>顾客点单 · 店家管理 · 一站式完成</p>
+  </header>
+  <main>
+      <div class="btn-group">
+          <a href="{{url_for('customer_login')}}" >我是顾客 👤（选购商品与进行下单）</a> 
+          <a href="{{url_for('store_login')}}">我是店家 🛒（管理商品与订单信息）</a> 
+      </div>
+  </main>
+  <footer>
+      <p>怡人便利店 | 技术支持邮箱：zhou39506@gmail.com</p>
+  </footer>
+
+
+</body>
+</html>

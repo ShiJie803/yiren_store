@@ -1,0 +1,149 @@
+<div class="card">
+    <h2>我的订单</h2>
+    <form method="get" style="margin-bottom: 15px;">
+        <input placeholder="请输入订单的商品名称" type="text" name="search" value="{{search}}" aria-label="搜索订单" required>
+        <button type="submit">搜索订单</button>
+    </form>
+    <div class="table-container" style="overflow-x: auto; width: auto;background-color: rgba(255,255,255,0.1);">
+        <table>
+            <thead>
+                <tr>
+                    <th>订单编号</th>
+                    <th>顾客姓名</th>
+                    <th>手机号码</th>
+                    <th>收件地址</th>
+                    <th>创建时间</th>
+                    <th>商品编号</th>
+                    <th>商品名称</th>
+                    <th>价格</th>
+                    <th>分类</th>
+                    <th>购买量</th>
+                    <th>订单状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{order.id}}</td>
+                        <td>{{order.customer}}</td>
+                        <td>{{order.phone}}</td>
+                        <td>{{order.address}}</td>
+                        <td>{{order.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        {% for item in order.items %}
+                            <td>{{item.product.id}}</td>
+                            <td>{{item.product.name}}</td>
+                            <td>{{item.product.price}}</td>
+                            <td>{{item.product.category}}</td>
+                            <td>{{item.product.quantity}}</td>
+                            <td>{{item.product.status}}</td>
+                        {% endfor %}   
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6">暂无购买记录</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+   </div>
+    <div class="pagination" role="navigation" aria-label="分页导航">
+        {% if pagination.has_prev %}
+            <a href="{{url_for('order_view',page=pagination.prev_num,search=search)}}">上一页</a>
+        {% else %}
+            <a class="disabled">上一页</a>
+        {% endif %}
+
+        {% for p in page.iter_pages (left_edge=1,right_edge=1,left_current=3,right_current=3) %}
+            {% if p %}
+                {% if p==pagination.page %}
+                    <a class="active" href="#" aria-current="page">{{p}}</a>
+                {% else %}
+                    <a href="{{url_for('order_view',page=p,search=search)}}">{{p}}</a>
+            {% else %}
+                <span>......</span>
+            {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+            <a href="{{url_for('order_view',page=pagination.prev_num,search=search)}}">下一页</a>
+        {% else %}
+            <a class="disabled">下一页</a>
+        {% endif %}
+    </div>
+</div>
+<style>
+    .card {
+      background-color: rgba(255,255,255,0.1);
+      padding: 20px 25px;
+      margin-bottom: 10px;
+      border-radius: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    form input{
+      padding: 8px 12px;
+      margin: 0 10px 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      font-size: 1em;
+      transition: border-color 0.3s ease;
+    }
+    form button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 15px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    form button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 1em;
+    }
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: rgba(255,255,255,0.1);
+      font-weight: bold;
+      color: #444;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pagination a, .pagination span {
+      padding: 8px 14px;
+      border: 1px solid #007bff;
+      color: #007bff;
+      text-decoration: none;
+      border-radius: 15px;
+      user-select: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .pagination a:hover {
+      background-color: #007bff;
+      color: white;
+    }
+    .pagination a.active {
+      background-color: #007bff;
+      color: white;
+      cursor: default;
+    }
+    .pagination a.disabled {
+      pointer-events: none;
+      color: #aaa;
+      border-color: #aaa;
+      background-color: transparent;
+      cursor: default;
+    }
+</style>

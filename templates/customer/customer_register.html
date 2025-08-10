@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>顾客注册页面</title>
+    <style>
+        body{
+            background-image: url("{{url_for('static',filename='background.jpg')}}");
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            max-width: 600px;
+            margin: auto;
+            padding: 40px 20px;
+            color: #333;
+        }
+        header{
+            text-align: center;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        header h1{
+            margin-bottom: 10px ;
+        }
+        main{
+            text-align: center;
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 10px rgba(0, 0, 0, 0.05);
+        }
+        form{
+            text-align: left;
+            text-decoration: none;
+            background-color: rgba(255, 255, 255, 0);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        form label{
+            font-weight: bold;
+        }
+        form input{
+            width: 97%;
+            padding: 8px;
+            border-radius: 15px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+        }
+        form button{
+            padding: 10px 20px;
+            border: none;
+            background-color: rgb(32, 173, 34);
+            color:white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 120px;
+            font-size: 1em;
+            transition: background-color 0.2s ease;
+        }
+        form button:hover{
+            background-color: green;
+        }
+        form a{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 10px;
+            color: white;
+            background-color: rgb(255, 70, 70);
+            border-radius: 20px;
+            padding: 10px 20px 10px 20px ;
+            width: 80px;
+        }
+        form a:hover{
+            background-color: red;
+        }
+        .register-message{
+            color: red;
+            border-radius: 15px;
+            padding: 10px;
+            background-color: white;
+            margin-top: 10px;
+            border: 1px solid #f5c6cb;
+        }
+        .register-link{
+            display: flex;
+            flex-direction: column;
+            margin-top: 15px;
+            text-align: left;
+            background-color: rgba(255, 255, 255, 0);
+        }
+        .register-link a{
+            text-align: center;
+            text-decoration: none;
+            margin-left: 20px;
+            color: white;
+            background-color: rgb(72, 167, 255);
+            font-weight: bold;
+            border-radius: 20px;
+            padding: 10px 20px 10px 20px ;
+            width: 80px;
+        }
+        .register-link a:hover{
+            background-color: blue;
+        }
+        footer{
+            margin-top: 40px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>顾客您好！欢迎进入怡人便利店购物系统，请输入您的账号和密码进行注册</h1>
+    </header>
+    <main>
+        <form method="post">
+            <label for="customer_username">账号：</label>
+            <input id="customer_username" name="username" type="text" placeholder="请输入您的账号" required>
+
+            <label for="customer_password">密码：</label>
+            <input id="customer_password" name="password" type="text" placeholder="请输入您的密码" required>
+
+            <button type="submit">点击注册</button>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for msg in messages%}
+                        <div class="register-message">{{msg}}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </form>
+        <div class="register-link">
+            <a href="{{url_for('customer_login')}}">老顾客登录</a>
+        </div>
+    </main>
+    <footer>
+        <p>怡人便利店购物系统 | 技术支持邮箱：zhou39506@gmail.com</p>
+    </footer>
+</body>
+</html>
+

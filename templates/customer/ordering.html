@@ -1,0 +1,223 @@
+<form method="post" id="orderForm">
+    <h2>下单页面</h2>
+    <label for="customer">顾客姓名：</label>
+    <input id="customer" type="text " name="customer" placeholder="请输入您的姓名">
+
+    <label for="phone">手机号码：</label>
+    <input id="phone" name="phone" type="text" placeholder="请输入手机号码">
+
+    <label for="address">收件地址：</label>
+    <input id="address" name="address" type="text"  placeholder="请输入收件地址">
+
+    <h2>商品列表</h2>
+    <div style="display: flex;flex-direction: row;">
+        <input placeholder="请输入商品名称" type="text" name="search" value="{{search}}" aria-label="搜索商品" style="height: 40px;" required>
+        <button type="submit" onclick="searchProducts()" style="text-align:center;padding: 5px;;margin:5px 0px 0px 5px;height: 40px;">搜索商品</button>
+    </div>
+    <div style="overflow-x: auto;background-color: rgba(255,255,255,0.1);">
+        <table>
+            <thead>
+                <tr>
+                    <th>商品编号</th>
+                    <th>商品名称</th>
+                    <th>分类</th>
+                    <th>价格</th>
+                    <th>库存</th>
+                    <th>购买量</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                    <tr>
+                        <td>{{product.id}}</td>
+                        <td>{{product.name}}</td>
+                        <td>{{product.category}}</td>
+                        <td>{{product.price}}</td>
+                        <td>{{product.stock}}</td>
+                        <td>
+                            <input type="hidden" value="{{product.id}}" name="product_id">
+                            <input type="number" name="quantity" class="quantity" min="0" max="{{product.stock}}" placeholder="购买量" style="width:100px;margin:auto;">
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination" role="navigation" aria-label="分页导航">
+        {% if pagination.has_prev %}
+            <a href="{{url_for('product_view',page=pagination.prev_num,search=search)}}">上一页</a>
+        {% else %}
+            <a class="disabled">上一页</a>
+        {% endif %}
+
+        {% for p in page.iter_pages (left_edge=1,right_edge=1,left_current=3,right_current=3) %}
+            {% if p %}
+                {% if p==pagination.page %}
+                    <a class="active" href="#" aria-current="page">{{p}}</a>
+                {% else %}
+                    <a href="{{url_for('product_view',page=p,search=search)}}">{{p}}</a>
+            {% else %}
+                <span>......</span>
+            {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+            <a href="{{url_for('product_view',page=pagination.prev_num,search=search)}}">下一页</a>
+        {% else %}
+            <a class="disabled">下一页</a>
+        {% endif %}
+    </div>  
+    <div class="total">订单总金额：<span id="total_amount">0.00</span></div>
+    <button type="submit" onclick="submitOrder()">提交订单</button>
+</form>
+
+<style>
+    form {
+      max-width: 800px;
+      margin: auto;
+      background-color: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    form h2{
+        font-weight: bold;
+    }
+    form label {
+      font-weight: bold;
+    }
+
+    form input{
+      width: 100%;
+      padding: 8px 12px;
+      margin-top: 5px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      box-sizing: border-box;
+    }
+
+    form table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    form th, form td {
+      padding: 10px;
+      border: 1px solid #dee2e6;
+      text-align: center;
+    }
+
+    form th {
+      background-color: #80ddfc;
+    }
+
+    form button {
+      display: block;
+      width: 100px;
+      background-color: #007bff;
+      color: white;
+      margin-top: 10px;
+      margin-left: 4px;
+      padding: 12px;
+      font-size: 1em;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #0056b3;
+    }
+
+    .total {
+      text-align: left;
+      font-size: 1.2em;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .category{
+      margin-top: 30px;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      color: #444;
+      border-left: 4px solid #007bff;
+      padding-left: 10px;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pagination a, .pagination span {
+      padding: 8px 14px;
+      border: 1px solid #007bff;
+      color: #007bff;
+      text-decoration: none;
+      border-radius: 15px;
+      user-select: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .pagination a:hover {
+      background-color: #007bff;
+      color: white;
+    }
+    .pagination a.active {
+      background-color: #007bff;
+      color: white;
+      cursor: default;
+    }
+    .pagination a.disabled {
+      pointer-events: none;
+      color: #aaa;
+      border-color: #aaa;
+      background-color: transparent;
+      cursor: default;
+    }
+</style>
+
+<script>
+    const quantityInputs = document.querySelectorAll('.quantity');
+    const prices = document.querySelectorAll('.price');
+    const totalAmount = document.getElementById("total_amount");
+
+    function calculateTotal() {
+        let total = 0;
+        quantityInputs.forEach((qty, i) => {
+            const quantity = parseInt(qty.value) || 0;
+            const price = parseFloat(prices[i].textContent);
+            total += quantity * price;
+        });
+        totalAmount.textContent = total.toFixed(2);
+    }
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('input', calculateTotal);
+    });
+
+    calculateTotal(); // 初始化金额
+
+    function searchProducts(){
+      const form = document.getElementById('orderForm');
+      form.method = 'get';
+      form.submit();
+    }
+    function submitOrder(){
+      const form = document.getElementById('orderForm');
+      const confirmSubmit = confirm('确认提交订单吗？');
+      if (confirmSubmit){
+        form.method='post';
+        form.submit();
+      }
+    }
+</script>
+

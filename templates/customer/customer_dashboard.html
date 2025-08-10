@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>顾客浏览页面</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+  <style>
+    body{
+      background-image: url("{{url_for('static',filename='background.jpg')}}");
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .nav-link{
+      text-decoration: none;
+      color: white;
+      background-color: rgb(255, 70, 70);
+      border-radius: 20px;
+      padding: 10px 10px 10px 12px ;
+      width: 120px;
+    }
+    .nav-link:hover{
+      background-color: red;
+    }
+    .sidebar{
+      width: 200px;
+      background-color: rgba(255, 255, 255, 0.3);
+      padding-top: 20px;
+      border-right: 1px solid #ddd;
+      height: 100%;
+    }
+    .sidebar a{
+      display: block;
+      text-decoration: none;
+      color: #333;
+      padding: 10px 20px;
+    }
+    .sidebar a:hover,.sidebar a.active{
+      background-color: #e9ecef;
+      font-weight: bold;
+    }
+    .main-content{
+      flex-grow: 1;
+      padding: 20px;
+      height: 100%;
+      overflow-y: auto;
+    }
+    footer{
+      margin-top: 40px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 1em;
+      }
+  </style>
+<body>
+  <nav class="navbar navbar-light bg-light px-3">
+    <span class="navbar-brand mb-0 h1"><strong>👤顾客您好！欢迎进入怡人便利店购物系统！点击左侧工作栏开启今日工作</strong></span>
+    <span>怡人便利店购物系统 | 技术支持邮箱：zhou39506@gmail.com</span>
+    <a href="{{url_for('customer_login')}}" class="nav-link">返回登录页面</a>
+  </nav>
+  <div class="d-flex" style="height: calc(100% - 56px);">
+    <div class="sidebar">
+      <a href="#" class="active" onclick="switchModule('product')">商品浏览</a>
+      <a href="#" onclick="switchModule('order')">订购商品</a>
+      <a href="#" onclick="switchModule('record')">购买记录</a>
+    </div>
+
+    <div class="main-content" id="main-content"></div>
+  </div>
+  <script>
+    function getModuleTitle(key){
+      const titles={
+        product:'商品浏览',
+        order: "订购商品",
+        record: "购买记录"
+      };
+      return titles[key] || '未知模块';
+    }
+
+    async function switchModule(module){
+      document.querySelectorAll('.sidebar a').forEach(link => link.classList.remove('active'));
+      event.target.classList.add('active');
+      const title = getModuleTitle(module);
+      const contentDiv = document.getElementById('main-content');
+      try{
+        const res = await fetch(`${module}.html`);
+        if (!res.ok) throw Error(`HTTP ${res.status} ${res.statusText}`);
+
+        const html = await res.text();
+        contentDiv.innerHTML = `<h2>${title}</h2>` + html;
+      }
+      catch(err){
+        contentDiv.innerHTML = `<h2>${title}</h2> <p>模块加载失败：${err.message}</p>`;
+      }
+    }
+
+    window.onload = function(){
+      switchModule('product');
+    }
+  </script>
+</body>
+</html>
