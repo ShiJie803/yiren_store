@@ -197,7 +197,7 @@ def product():
         if search:
             query = query.filter(Product.name.ilike(f'%{search}%'))
 
-        pagination = query.order_by(Product.id).paginate(page,per_page,error_out=False)
+        pagination = query.order_by(Product.id).paginate(page=page, per_page=per_page, error_out=False)
         products = pagination.items
 
     return render_template('store/product.html',
@@ -236,7 +236,7 @@ def order():
         if search:
             query = query.join(Order.items).join(OrderItem.product).filter(Product.name.contains(search))
 
-        pagination = query.order_by(Order.id).paginate(page,per_page,error_out=False)
+        pagination = query.order_by(Order.id).paginate(page=page, per_page=per_page, error_out=False)
         orders = pagination.items
 
     return render_template('store/order.html',orders=orders,pagination=pagination)
@@ -306,7 +306,7 @@ def purchase():
    if search:
       query = query.filter(Purchase.product_name.ilike(f'%{search}%'))
 
-   pagination = query.order_by(Purchase.id).paginate(page,per_page,error_out=False)
+   pagination = query.order_by(Purchase.id).paginate(page=page, per_page=per_page, error_out=False)
    purchases = pagination.items
 
    return render_template('store/purchase.html',
@@ -525,7 +525,7 @@ def product_view():
         if search:
             query = query.filter(Product.name.ilike(f'%{search}%'))
 
-        pagination = query.order_by(Product.id).paginate(page, per_page, error_out=False)
+        pagination = query.order_by(Product.id).paginate(page=page, per_page=per_page, error_out=False)
         products = pagination.items
 
     except Exception as e:
@@ -589,7 +589,7 @@ def ordering():
     if search:
         query = query.filter(Product.name.ilike(f'%{search}%'))
 
-    pagination = query.order_by(Product.id).paginate(page, per_page, error_out=False)
+    pagination = query.order_by(Product.id).paginate(page=page, per_page=per_page, error_out=False)
     products = pagination.items
     return render_template('customer/ordering.html',products=products,pagination=pagination)
 
@@ -612,7 +612,7 @@ def order_view():
             if search:
                 query = query.filter(Order.product_name.ilike(f'%{search}%'))
 
-            pagination = query.order_by(Order.id).paginate(page, per_page, error_out=False)
+            pagination = query.order_by(Order.id).paginate(page=page, per_page=per_page, error_out=False)
             orders = pagination.items
 
         except Exception as e:
