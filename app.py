@@ -258,10 +258,20 @@ def delete_order(order_id):
     if not session.get('store_logged_in'):
         flash('请先登录')
         return redirect(url_for('store_login'))
-    order_delete = Order.query.get_or_404(order_id)
-    db.session.delete(order_delete)
-    db.session.commit()
-    flash('该订单已删除')
+
+    try:
+        order_delete = Order.query.get_or_404(order_id)
+        for item in order_delete.items:
+            item.product.stock += item.quantity
+        db.session.delete(order_delete)
+        db.session.commit()
+        flash('该订单已删除')
+
+    except Exception as e:
+        db.session.rollback()
+        print(e)
+        flash('订单删除失败')
+    
     return redirect(url_for('order'))
 
 @app.route('/purchase',methods = ['GET','POST'])
