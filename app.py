@@ -150,7 +150,7 @@ def store_module(name):
     allowed_modules = ['product','order','purchase','export']
     if name not in allowed_modules:
         abort(404)
-    return render_template(f'store/{name}.html')
+    return redirect(url_for(name))
 
 @app.route('/product',methods = ['GET','POST'])
 def product():
@@ -505,7 +505,7 @@ def customer_module(name):
     allowed_modules = ['product_view','ordering','order_view']
     if name not in allowed_modules:
         abort(404)
-    return render_template(f'customer/{name}.html')
+    return redirect(url_for(name))
 
 @app.route('/product_view', methods=['GET'])
 def product_view():
