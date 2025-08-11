@@ -59,7 +59,7 @@
       }
   </style>
 <body>
-  <nav class="navbar navbar-light bg-light px-3">
+  <nav class="navbar navbar-light bg-light px-3" style="background-color: rgba(255, 255, 255, 0.1);">
     <span class="navbar-brand mb-0 h1"><strong>👤顾客您好！欢迎进入怡人便利店购物系统！点击左侧工作栏开启今日工作</strong></span>
     <span>怡人便利店购物系统 | 技术支持邮箱：zhou39506@gmail.com</span>
     <a href="{{url_for('customer_logout')}}" class="nav-link">退出登录</a>
@@ -83,9 +83,9 @@
       return titles[key] || '未知模块';
     }
 
-    async function switchModule(module,event){
+    async function switchModule(module,el){
       document.querySelectorAll('.sidebar a').forEach(link => link.classList.remove('active'));
-      if(event) event.target.classList.add('active');
+      if(el) el.target.classList.add('active');
       const title = getModuleTitle(module);
       const contentDiv = document.getElementById('main-content');
       try{
@@ -103,11 +103,12 @@
       link.addEventListener('click' , e => {
         e.preventDefault();
         const module = link.dataset.module;
-        switchModule(module,e.target);
+        switchModule(module,link);
       });
     })
     window.onload = function(){
-      switchModule('product_view',document.querySelectorAll(".sidebar a[data-module='product_view']"));
+      const firstlink = document.querySelectorAll(".sidebar a[data-module='product_view']");
+      switchModule('product_view',firstlink);
     }
   </script>
 </body>
