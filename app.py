@@ -535,54 +535,63 @@ def product_view():
     return render_template('customer/product_view.html',
                                products=products, pagination=pagination)
 
-@app.route('/ordering', methods=['POST'])
+@app.route('/ordering', methods=['GET','POST'])
 def ordering():
     if not session.get('customer_logged_in'):
         flash('请先登录')
         return redirect(url_for('customer_login'))
+    if request.method == 'POST':
+        try:
+            customer = request.form.get('customer')
+            phone = request.form.get('phone')
+            address = request.form.get('address')
+            product_id = int(request.form.get('product_id'))
+            quantity = int(request.form.get('quantity'))
+            product_choose = Product.query.get(product_id)
 
-    try:
-        customer = request.form.get('customer')
-        phone = request.form.get('phone')
-        address = request.form.get('address')
-        product_id = int(request.form.get('product_id'))
-        quantity = int(request.form.get('quantity'))
-        product_choose = Product.query.get(product_id)
+            if not customer or not phone or not address or quantity <= 0:
+                flash('请填写完整的有效信息')
+                return redirect(url_for('ordering'))
 
-        if not customer or not phone or not address or quantity <= 0:
-            flash('请填写完整的有效信息')
-            return redirect(url_for('ordering'))
+            if not product_choose :
+                flash('该商品不存在')
+                return redirect(url_for('ordering'))
 
-        if not product_choose :
-            flash('该商品不存在')
-            return redirect(url_for('ordering'))
+            if product_choose.stock < quantity:
+                flash('库存不足')
+                return redirect(url_for('ordering'))
 
-        if product_choose.stock < quantity:
-            flash('库存不足')
-            return redirect(url_for('ordering'))
+            # 创建订单
+            new_order = Order(customer=customer, phone=phone, address=address)
+            db.session.add(new_order)
+            db.session.flush() # 获得new_order.id
 
-        # 创建订单
-        new_order = Order(customer=customer, phone=phone, address=address)
-        db.session.add(new_order)
-        db.session.flush() # 获得new_order.id
+            # 创建订单项
+            new_order_item = OrderItem(order_id=new_order.id, product_id=product_id, quantity=quantity)
+            db.session.add(new_order_item)
+            product_choose.stock -= quantity
 
-        # 创建订单项
-        new_order_item = OrderItem(order_id=new_order.id, product_id=product_id, quantity=quantity)
-        db.session.add(new_order_item)
-        product_choose.stock -= quantity
+            db.session.commit()
+            flash('订单已提交')
+            return redirect(url_for('order_view'))
 
-        db.session.commit()
-        flash('订单已提交')
-        return redirect(url_for('order_view'))
-
-    except Exception as e:
-        db.session.rollback()
-        print(e)
-        flash('提交订单失败')
+        except Exception as e:
+            db.session.rollback()
+            print(e)
+            flash('提交订单失败')
 
     # GET渲染订单提交页面
-    products = Product.query.all()
-    return render_template('customer/ordering.html',products=products)
+    search = request.args.get('search', '', type=str)
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+
+    query = Product.query
+    if search:
+        query = query.filter(Product.name.ilike(f'%{search}%'))
+
+    pagination = query.order_by(Product.id).paginate(page, per_page, error_out=False)
+    products = pagination.items
+    return render_template('customer/ordering.html',products=products,pagination=pagination)
 
 @app.route('/order_view', methods=['GET'])
 def order_view():
