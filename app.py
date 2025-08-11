@@ -334,7 +334,7 @@ def delete_purchase(purchase_id):
     flash('该进货单已删除')
     return redirect(url_for('purchase'))
 
-@app.route('/export_data', methods=['GET'])
+@app.route('/export', methods=['GET'])
 def export_data():
     if not session.get('store_logged_in'):
         flash('请先登录')
