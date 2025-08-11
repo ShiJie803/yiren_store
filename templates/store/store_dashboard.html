@@ -90,7 +90,7 @@
       const title = getModuleTitle(module);
       const contentDiv = document.getElementById('main-content');
       try{
-        const res = await fetch(`${module}.html`);
+        const res = await fetch(`/store/module/${module}`);
         if (!res.ok) throw Error(`HTTP ${res.status} ${res.statusText}`);
 
         const html = await res.text();
