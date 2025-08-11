@@ -93,7 +93,7 @@
         if (!res.ok) throw Error(`HTTP ${res.status} ${res.statusText}`);
 
         const html = await res.text();
-        contentDiv.innerHTML = `<h2>${title}</h2>` + html;
+        contentDiv.innerHTML = html;
       }
       catch(err){
         contentDiv.innerHTML = `<h2>${title}</h2> <p>模块加载失败：${err.message}</p>`;
