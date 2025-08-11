@@ -85,7 +85,7 @@
 
     async function switchModule(module,el){
       document.querySelectorAll('.sidebar a').forEach(link => link.classList.remove('active'));
-      if(el) el.target.classList.add('active');
+      if(el) el.classList.add('active');
       const title = getModuleTitle(module);
       const contentDiv = document.getElementById('main-content');
       try{
