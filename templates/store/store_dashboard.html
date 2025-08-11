@@ -18,7 +18,7 @@
     }
     .nav-link{
       text-decoration: none;
-      text-align:center;
+      text-align: center;
       color: white;
       background-color: rgb(255, 70, 70);
       border-radius: 20px;
@@ -66,17 +66,17 @@
   </nav>
   <div class="d-flex" style="height: calc(100% - 56px);">
     <div class="sidebar">
-      <a href="#" class="active" onclick="switchModule('product')">商品管理</a>
-      <a href="#" onclick="switchModule('order')">订单管理</a>
-      <a href="#" onclick="switchModule('purchase')">进货管理</a>
-      <a href="#" onclick="switchModule('export')">数据导出</a>
+      <a href="#" data-module="product" class="active">商品管理</a>
+      <a href="#" data-module="order">订单管理</a>
+      <a href="#" data-module="purchase">进货管理</a>
+      <a href="#" data-module="export">数据导出</a>
     </div>
 
     <div class="main-content" id="main-content"></div>
   </div>
   <script>
     function getModuleTitle(key){
-      const titles={
+      const titles = {
         product:'商品管理',
         order: "订单管理",
         purchase: "进货管理",
@@ -84,10 +84,9 @@
       };
       return titles[key] || '未知模块';
     }
-
-    async function switchModule(module){
+    async function switchModule(module,event){
       document.querySelectorAll('.sidebar a').forEach(link => link.classList.remove('active'));
-      event.target.classList.add('active');
+      if(event) event.target.classList.add('active'); // 第一次加载时可能没有event
       const title = getModuleTitle(module);
       const contentDiv = document.getElementById('main-content');
       try{
@@ -101,9 +100,15 @@
         contentDiv.innerHTML = `<h2>${title}</h2> <p>模块加载失败：${err.message}</p>`;
       }
     }
-
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click' , e => {
+        e.preventDefault();
+        const module = link.dataset.module;
+        switchModule(module,e.target);
+      });
+    })
     window.onload = function(){
-      switchModule('product');
+      switchModule('product',document.querySelectorAll(".sidebar a[data-module='product']"));
     }
   </script>
 </body>
