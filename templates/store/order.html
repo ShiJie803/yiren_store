@@ -39,9 +39,7 @@
                             <form action="{{url_for('update_order_status',order_id=order.id)}}" method="post" style="display: inline-block;">
                                 <select name="status" onchange="this.form.submit()">
                                     <option value="待处理" {% if order.status == '待处理'%}selected{% endif %}>待处理</option>
-                                    <option value="处理中" {% if order.status == '处理中'%}selected{% endif %}>处理中</option>
                                     <option value="已处理" {% if order.status == '已处理'%}selected{% endif %}>已处理</option>
-                                    <option value="已取消" {% if order.status == '已取消'%}selected{% endif %}>已取消</option>
                                 </select>
                             </form>
                         </td>
