@@ -456,7 +456,7 @@ def customer_register():
 
     return render_template('customer/customer_register.html')
 
-@app.route('/customer_login')
+@app.route('/customer_login' , methods=['GET','POST'])
 def customer_login():
     if request.method == 'POST':
         try:
@@ -608,9 +608,9 @@ def order_view():
             page = request.args.get('page', 1, type=int)
             per_page = 10
 
-            query = Order.query
+            query = Order.query.options(joinedload(Order.items).joinedload(OrderItem.product))
             if search:
-                query = query.filter(Order.product_name.ilike(f'%{search}%'))
+                query = query.join(Order.items).join(OrderItem).filter(Product.name.ilike(f'%{search}%'))
 
             pagination = query.order_by(Order.id).paginate(page=page, per_page=per_page, error_out=False)
             orders = pagination.items
