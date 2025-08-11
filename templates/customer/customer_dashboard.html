@@ -18,7 +18,7 @@
     }
     .nav-link{
       text-decoration: none;
-      text-align:center;
+      text-align: center;
       color: white;
       background-color: rgb(255, 70, 70);
       border-radius: 20px;
@@ -66,9 +66,9 @@
   </nav>
   <div class="d-flex" style="height: calc(100% - 56px);">
     <div class="sidebar">
-      <a href="#" class="active" onclick="switchModule('product')">商品浏览</a>
-      <a href="#" onclick="switchModule('order')">订购商品</a>
-      <a href="#" onclick="switchModule('record')">购买记录</a>
+      <a href="#" data-module="product_view" class="active">商品浏览</a>
+      <a href="#" data-module="ordering">订购商品</a>
+      <a href="#" data-module="order_view'">购买记录</a>
     </div>
 
     <div class="main-content" id="main-content"></div>
@@ -83,9 +83,9 @@
       return titles[key] || '未知模块';
     }
 
-    async function switchModule(module){
+    async function switchModule(module,event){
       document.querySelectorAll('.sidebar a').forEach(link => link.classList.remove('active'));
-      event.target.classList.add('active');
+      if(event) event.target.classList.add('active');
       const title = getModuleTitle(module);
       const contentDiv = document.getElementById('main-content');
       try{
@@ -99,9 +99,15 @@
         contentDiv.innerHTML = `<h2>${title}</h2> <p>模块加载失败：${err.message}</p>`;
       }
     }
-
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click' , e => {
+        e.preventDefault();
+        const module = link.dataset.module;
+        switchModule(module,e.target);
+      });
+    })
     window.onload = function(){
-      switchModule('product');
+      switchModule('product_view',document.querySelectorAll(".sidebar a[data-module='product_view']"));
     }
   </script>
 </body>
