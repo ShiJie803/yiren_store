@@ -142,6 +142,16 @@ def store_dashboard():
 
     return render_template('store/store_dashboard.html')
 
+@app.route('/store/module/<name>')
+def store_module(name):
+    if not session.get('store_logged_in'):
+        flash('请先登录')
+        return redirect(url_for('store_login'))
+    allowed_modules = ['product','order','purchase','export']
+    if name not in allowed_modules:
+        abort(404)
+    return render_template(f'store/{name}.html')
+
 @app.route('/product',methods = ['GET','POST'])
 def product():
     if not session.get('store_logged_in'):
@@ -486,6 +496,16 @@ def customer_dashboard():
         return redirect(url_for('customer_login'))
 
     return render_template('customer/customer_dashboard.html')
+
+@app.route('/customer/module/<name>')
+def customer_module(name):
+    if not session.get('customer_logged_in'):
+        flash('请先登录')
+        return redirect(url_for('customer_login'))
+    allowed_modules = ['product_view','ordering','order_view']
+    if name not in allowed_modules:
+        abort(404)
+    return render_template(f'customer/{name}.html')
 
 @app.route('/product_view', methods=['GET'])
 def product_view():
