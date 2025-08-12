@@ -31,7 +31,7 @@
     }
     .sidebar{
       width: 200px;
-      background-color: rgba(255, 255, 255, 0);
+      background-color: rgba(255, 255, 255, 0.3);
       padding-top: 20px;
       height: 100%;
     }
@@ -59,12 +59,12 @@
       }
   </style>
 <body>
-  <nav class="navbar navbar-light px-3" style="background-color: rgba(255, 255, 255, 0);">
+  <nav class="navbar navbar-light px-3" style="background-color: rgba(255, 255, 255, 0.5);">
     <span class="navbar-brand mb-0 h1"><strong><i class="bi bi-person-check"></i>顾客您好！欢迎进入怡人便利店购物系统！点击左侧工作栏开启今日工作</strong></span>
     <span>怡人便利店购物系统 | 技术支持邮箱：zhou39506@gmail.com</span>
     <a href="{{url_for('customer_logout')}}" class="nav-link">退出登录</a>
   </nav>
-  <div class="d-flex" style="height: calc(100% - 56px);background-color: rgba(255, 255, 255, 0);">
+  <div class="d-flex" style="height: calc(100% - 56px);background-color: rgba(255, 255, 255, 0.5);">
     <div class="sidebar">
       <a href="#" data-module="product_view" class="active">商品浏览</a>
       <a href="#" data-module="ordering">订购商品</a>
